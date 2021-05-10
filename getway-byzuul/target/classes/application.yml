@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: zuul-gateway
+server:
+  port: 5555
+
+ribbon:
+  ReadTimeout: 3000
+  ConnectTimeout: 3000
+
+
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeout-in-milliseconds: 3000
+
+zuul:
+  routes:
+    orient-service-url:
+      path: /client
+      service-id: provider-client    #过滤了 微服务层的所有轻求
+
+#    traditional-url:                             #传统的路由配置,此名称可以自定义
+#      path: /tr-url/**                           #映射的url
+#      url: http://localhost:5501/                #被映射的url  直接映射到实例url
+    top-controller-url:
+      path: /test/**
+      service-id: provider-service   #最上层请求过滤
+  host:
+      connect-timeout-millis: 3000
+      socket-timeout-millis: 3000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:5761/eureka/
